@@ -24,20 +24,21 @@ public class SyzygyBridge {
 
     static {
         try {
+            String libName = System.mapLibraryName("JSyzygy");
             Path jarfile = Paths.get(SyzygyBridge.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-            File libFile = jarfile.getParent().resolve("libJSyzygy.so").toFile();
-            LOG.info("looking for libJSyzygy.so at location {}", libFile);
+            File libFile = jarfile.getParent().resolve(libName).toFile();
+            LOG.info("looking for {} at location {}", libName, libFile);
             if (libFile.exists()) {
                 System.load(libFile.getAbsolutePath());
-                LOG.info("loaded libJSyzygy.so");
+                LOG.info("loaded {}", libName);
             } else {
-                File classpathLibFile = Paths.get(SyzygyBridge.class.getClassLoader().getResource("libJSyzygy.so").toURI()).toFile();
-                LOG.info("looking for libJSyzygy.so at location {}", classpathLibFile);
+                File classpathLibFile = Paths.get(SyzygyBridge.class.getClassLoader().getResource(libName).toURI()).toFile();
+                LOG.info("looking for {} at location {}", libName, classpathLibFile);
                 if (classpathLibFile.exists()){
                     System.load(classpathLibFile.getAbsolutePath());
-                    LOG.info("loaded libJSyzygy.so");
+                    LOG.info("loaded {}", libName);
                 } else {
-                    LOG.info("looking for libJSyzygy.so at java.library.path: {}", System.getProperty("java.library.path"));
+                    LOG.info("looking for {} at java.library.path: {}", libName, System.getProperty("java.library.path"));
                     System.loadLibrary("JSyzygy");
                 }
             }
