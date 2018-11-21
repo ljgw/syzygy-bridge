@@ -26,5 +26,4 @@ public class SyzygyConstants {
     public static final int  TB_RESULT_PROMOTES_SHIFT    = 16;
     public static final int  TB_RESULT_DTZ_SHIFT         = 20;
 
-
 }

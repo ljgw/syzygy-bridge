@@ -21,6 +21,7 @@ public class SyzygyBridge {
     private static boolean libLoaded = false;
     private static int tbLargest = 0;
 
+    private SyzygyBridge(){}
 
     static {
         try {
@@ -62,7 +63,7 @@ public class SyzygyBridge {
      * @return true if the JSyzygy JNI library is loaded and tablebases suitable for the supplied number of pieces are loaded.
      */
     public static boolean isAvailable(int piecesLeft){
-        return libLoaded & piecesLeft <= tbLargest;
+        return libLoaded && piecesLeft <= tbLargest;
     }
 
     /**
@@ -70,7 +71,7 @@ public class SyzygyBridge {
      * @param path the location of the tablebases
      * @return the supported size of the loaded tablebases
      */
-    public synchronized static int load(String path){
+    public static synchronized int load(String path){
         if (tbLargest>0){
             LOG.warn("Syzygy tablebases are already loaded");
             return tbLargest;
@@ -108,7 +109,7 @@ public class SyzygyBridge {
      * @param turn true if white is to move, false if black is.
      * @return WDL result (see c code)
      */
-    public static int probeSyzygyWDL(long white, long black, long kings, long queens, long rooks, long bishops, long knights, long pawns, int ep, boolean turn){
+    public static int probeSyzygyWDL(long white, long black, long kings, long queens, long rooks, long bishops, long knights, long pawns, int ep, boolean turn){ //NOSONAR
         return probeWDL(white, black, kings, queens, rooks, bishops, knights, pawns, ep, turn);
     }
 
@@ -127,14 +128,14 @@ public class SyzygyBridge {
      * @param turn true if white is to move, false if black is.
      * @return DTZ result (see c code)
      */
-    public static int probeSyzygyDTZ(long white, long black, long kings, long queens, long rooks, long bishops, long knights, long pawns, int rule50, int ep, boolean turn){
+    public static int probeSyzygyDTZ(long white, long black, long kings, long queens, long rooks, long bishops, long knights, long pawns, int rule50, int ep, boolean turn){ //NOSONAR
         return probeDTZ(white, black, kings, queens, rooks, bishops, knights, pawns, rule50, ep, turn);
     }
 
 
     private static native boolean init(String path);
     private static native int getTBLargest();
-    private static native int probeWDL(long white, long black, long kings, long queens, long rooks, long bishops, long knights, long pawns, int ep, boolean turn);
-    private static native int probeDTZ(long white, long black, long kings, long queens, long rooks, long bishops, long knights, long pawns, int rule50, int ep, boolean turn);
+    private static native int probeWDL(long white, long black, long kings, long queens, long rooks, long bishops, long knights, long pawns, int ep, boolean turn); //NOSONAR
+    private static native int probeDTZ(long white, long black, long kings, long queens, long rooks, long bishops, long knights, long pawns, int rule50, int ep, boolean turn); //NOSONAR
 
 }
