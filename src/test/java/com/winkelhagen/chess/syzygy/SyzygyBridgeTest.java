@@ -52,7 +52,13 @@ public class SyzygyBridgeTest {
 
     @org.junit.Test
     public void probeSyzygyDTZ() {
-        assertEquals("KRvK should win in this position", 19924244, SyzygyBridge.probeSyzygyDTZ(3L, 4096L, 4097L, 0L, 2L, 0L, 0L, 0L, 0, 0, true ));
+        int result = SyzygyBridge.probeSyzygyDTZ(3L, 4096L, 4097L, 0L, 2L, 0L, 0L, 0L, 0, 0, true );
+        assertEquals("KRvK should win in this position", 19924244, result);
+        assertEquals("KRvK DTZ result should indicate a rook move in this position", 1, SyzygyConstants.fromSquare(result));
+        assertEquals("KRvK DTZ result should indicate a rook move to the third rank in this position", 17, SyzygyConstants.toSquare(result));
+        assertEquals("KRvK DTZ Result should indicate no promotion", 0, SyzygyConstants.promoteInto(result));
+        assertEquals("KRvK DTZ Result should indicate 19 ply", 19, SyzygyConstants.distanceToZero(result));
+        assertEquals("KRvK DTZ Result should indicate a win in this position", SyzygyConstants.TB_WIN, SyzygyConstants.winDrawLoss(result));
 
     }
 

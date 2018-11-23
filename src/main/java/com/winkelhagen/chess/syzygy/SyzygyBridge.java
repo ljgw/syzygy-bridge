@@ -5,15 +5,19 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 
 /**
- * Created by laurens on 16-9-18 for frankwalter.
- * javac SyzygyBridge.java -h .
+ * A bridge between Java and the Fathom library to access Syzygy tablebases.
  *
- * g++ -std=c++14 -O2 -Wall -D TB_USE_ATOMIC -D TB_NO_HW_POP_COUNT -fPIC -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux" -shared -o libJSyzygy.so tbprobe.c
+ * to compile the JSyzygy library on linux (libJSyzygy.so) the following cookbook can be executed
+ * <ul><li>generate the SyzygyBridge header file</li></ul>
+ * <pre>javac -cp ~/.m2/repository/org/apache/logging/log4j/log4j-api/2.11.1/log4j-api-2.11.1.jar src/main/java/com/winkelhagen/chess/syzygy/SyzygyBridge.java -h .</pre>
+ * <ul><li>compile the Fathom library</li></ul>
+ * <pre>g++ -std=c++14 -O2 -Wall -D TB_USE_ATOMIC -D TB_NO_HW_POP_COUNT -fPIC -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux" -shared -o libJSyzygy.so tbprobe.c</pre>
  */
 public class SyzygyBridge {
 
@@ -23,6 +27,9 @@ public class SyzygyBridge {
 
     private SyzygyBridge(){}
 
+    /*
+     * just loading the SyzygyBridge class will trigger loading the JSyzygy library via JNI.
+     */
     static {
         try {
             String libName = System.mapLibraryName("JSyzygy");
@@ -31,16 +38,18 @@ public class SyzygyBridge {
             LOG.info("looking for {} at location {}", libName, libFile);
             if (libFile.exists()) {
                 System.load(libFile.getAbsolutePath());
-                LOG.info("loaded {}", libName);
+                LOG.info("loaded {} located next to the .jar file", libName);
             } else {
-                File classpathLibFile = Paths.get(SyzygyBridge.class.getClassLoader().getResource(libName).toURI()).toFile();
-                LOG.info("looking for {} at location {}", libName, classpathLibFile);
-                if (classpathLibFile.exists()){
+                URL classpathLibUrl = SyzygyBridge.class.getClassLoader().getResource(libName);
+                LOG.info("looking for {} at location {}", libName, classpathLibUrl);
+                if (classpathLibUrl != null && Paths.get(classpathLibUrl.toURI()).toFile().exists()){
+                    File classpathLibFile = Paths.get(classpathLibUrl.toURI()).toFile();
                     System.load(classpathLibFile.getAbsolutePath());
-                    LOG.info("loaded {}", libName);
+                    LOG.info("loaded {} located in the resources directory", libName);
                 } else {
                     LOG.info("looking for {} at java.library.path: {}", libName, System.getProperty("java.library.path"));
                     System.loadLibrary("JSyzygy");
+                    LOG.info("loaded {} located in the java library path", libName);
                 }
             }
             libLoaded = true;
@@ -88,7 +97,7 @@ public class SyzygyBridge {
     }
 
     /**
-     *
+     * Returns the supported size of the loaded tablebases
      * @return the supported size of the loaded tablebases
      */
     public static int getSupportedSize(){
