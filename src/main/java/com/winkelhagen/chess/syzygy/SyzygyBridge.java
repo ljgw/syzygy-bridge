@@ -27,9 +27,11 @@ public class SyzygyBridge {
 
     private SyzygyBridge(){}
 
+    private static final String FILE_SCHEME = "file";
+
     /*
-     * just loading the SyzygyBridge class will trigger loading the JSyzygy library via JNI.
-     */
+         * just loading the SyzygyBridge class will trigger loading the JSyzygy library via JNI.
+         */
     static {
         try {
             String libName = System.mapLibraryName("JSyzygy");
@@ -42,7 +44,7 @@ public class SyzygyBridge {
             } else {
                 URL classpathLibUrl = SyzygyBridge.class.getClassLoader().getResource(libName);
                 LOG.info("looking for {} at location {}", libName, classpathLibUrl);
-                if (classpathLibUrl != null && Paths.get(classpathLibUrl.toURI()).toFile().exists()){
+                if (classpathLibUrl != null && FILE_SCHEME.equalsIgnoreCase(classpathLibUrl.toURI().getScheme()) && Paths.get(classpathLibUrl.toURI()).toFile().exists()){
                     File classpathLibFile = Paths.get(classpathLibUrl.toURI()).toFile();
                     System.load(classpathLibFile.getAbsolutePath());
                     LOG.info("loaded {} located in the resources directory", libName);
