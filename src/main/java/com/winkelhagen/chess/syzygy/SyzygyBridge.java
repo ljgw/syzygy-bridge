@@ -86,6 +86,7 @@ public class SyzygyBridge {
      * @return the supported size of the loaded tablebases
      */
     public static synchronized int load(String path){
+        LOG.info("loading syzygy tablebases from {}", path);
         if (tbLargest>0){
             LOG.warn("Syzygy tablebases are already loaded");
             return tbLargest;
