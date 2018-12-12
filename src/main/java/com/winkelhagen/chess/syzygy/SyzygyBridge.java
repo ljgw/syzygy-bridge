@@ -17,7 +17,10 @@ import java.nio.file.Paths;
  * <ul><li>generate the SyzygyBridge header file</li></ul>
  * <pre>javac -cp ~/.m2/repository/org/apache/logging/log4j/log4j-api/2.11.1/log4j-api-2.11.1.jar src/main/java/com/winkelhagen/chess/syzygy/SyzygyBridge.java -h .</pre>
  * <ul><li>compile the Fathom library</li></ul>
- * <pre>g++ -std=c++14 -O2 -Wall -D TB_USE_ATOMIC -D TB_NO_HW_POP_COUNT -fPIC -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux" -shared -o libJSyzygy.so tbprobe.c</pre>
+ * <pre>Linux (ubuntu 18.04.1 LTS):
+ * gcc -std=gnu99 -O2 -Wall -D TB_USE_ATOMIC -D TB_NO_HW_POP_COUNT -fPIC -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux" -shared -o libJSyzygy.so tbprobe.c</pre>
+ * <pre>Windows (10, mingw-w64\x86_64-8.1.0-win32-seh-rt_v6-rev0):
+ * gcc -std=gnu99 -O2 -Wall -D TB_USE_ATOMIC -DTB_NO_HW_POP_COUNT -fPIC -I"%JAVA_HOME%/include" -I"%JAVA_HOME%/include/win32" -shared -o JSyzygy.dll tbprobe.c</pre>
  */
 public class SyzygyBridge {
 
@@ -30,8 +33,8 @@ public class SyzygyBridge {
     private static final String FILE_SCHEME = "file";
 
     /*
-         * just loading the SyzygyBridge class will trigger loading the JSyzygy library via JNI.
-         */
+     * just loading the SyzygyBridge class will trigger loading the JSyzygy library via JNI.
+     */
     static {
         try {
             String libName = System.mapLibraryName("JSyzygy");

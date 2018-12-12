@@ -59,7 +59,7 @@
 				<version>2.6</version>
 				<executions>
 					<execution>
-						<id>copy-resources01</id>
+						<id>copy-resources-JSyzygy</id>
 						<phase>process-classes</phase>
 						<goals>
 							<goal>copy-resources</goal>
@@ -72,6 +72,7 @@
 									<directory>${basedir}/src/main/resources</directory>
 									<includes>
 										<include>libJSyzygy.so</include>
+										<include>JSyzygy.dll</include>
 									</includes>
 								</resource>
 							</resources>
