@@ -17,7 +17,7 @@ public class SyzygyBridgeTest {
     @org.junit.BeforeClass
     public static void setup(){
         URL testSyzygyDirectory = SyzygyBridgeTest.class.getClassLoader().getResource("syzygy");
-        String testSyzygyPath = testSyzygyDirectory.getPath();
+        String testSyzygyPath = testSyzygyDirectory.getPath().replaceAll("%20", " ");
         loadResult = SyzygyBridge.load(testSyzygyPath);
     }
 
