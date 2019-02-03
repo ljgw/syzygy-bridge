@@ -2,15 +2,10 @@ package com.winkelhagen.chess.syzygy;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.io.Console;
-import java.io.File;
 import java.net.URL;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by laurens on 21-11-18 for syzygy-bridge.
- */
 public class SyzygyBridgeTest {
 
     private static int loadResult;
