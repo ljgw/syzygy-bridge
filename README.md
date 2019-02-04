@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/ljgw/syzygy-bridge.svg?branch=master)](https://travis-ci.org/ljgw/syzygy-bridge)
 ### syzygy-bridge
 
 The SyzygyBridge project aims to provide a JNI bridge for a java chess engine to access the Excellent Syzygy Tablebases developed by Ronald de Man.
