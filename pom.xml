@@ -3,14 +3,14 @@
 	<groupId>com.winkelhagen.chess</groupId>
 	<artifactId>syzygy-bridge</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<name>Syzygy Bridge</name>
 
 	<scm>
 		<url>https://github.com/ljgw/syzygy-bridge</url>
 		<connection>scm:git:git://github.com/ljgw/syzygy-bridge.git</connection>
 		<developerConnection>scm:git:git@github.com:ljgw/syzygy-bridge.git</developerConnection>
-	  <tag>v1.0.0</tag>
+	  <tag>HEAD</tag>
   </scm>
 
 	<dependencies>
