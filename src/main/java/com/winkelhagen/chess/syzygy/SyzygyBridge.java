@@ -1,8 +1,5 @@
 package com.winkelhagen.chess.syzygy;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -24,7 +21,6 @@ import java.nio.file.Paths;
  */
 public class SyzygyBridge {
 
-    private static final Logger LOG = LogManager.getLogger();
     private static boolean libLoaded = false;
     private static int tbLargest = 0;
 
@@ -40,26 +36,20 @@ public class SyzygyBridge {
             String libName = System.mapLibraryName("JSyzygy");
             Path jarfile = Paths.get(SyzygyBridge.class.getProtectionDomain().getCodeSource().getLocation().toURI());
             File libFile = jarfile.getParent().resolve(libName).toFile();
-            LOG.info("looking for {} at location {}", libName, libFile);
             if (libFile.exists()) {
                 System.load(libFile.getAbsolutePath());
-                LOG.info("loaded {} located next to the .jar file", libName);
             } else {
                 URL classpathLibUrl = SyzygyBridge.class.getClassLoader().getResource(libName);
-                LOG.info("looking for {} at location {}", libName, classpathLibUrl);
                 if (classpathLibUrl != null && FILE_SCHEME.equalsIgnoreCase(classpathLibUrl.toURI().getScheme()) && Paths.get(classpathLibUrl.toURI()).toFile().exists()){
                     File classpathLibFile = Paths.get(classpathLibUrl.toURI()).toFile();
                     System.load(classpathLibFile.getAbsolutePath());
-                    LOG.info("loaded {} located in the resources directory", libName);
                 } else {
-                    LOG.info("looking for {} at java.library.path: {}", libName, System.getProperty("java.library.path"));
                     System.loadLibrary("JSyzygy");
-                    LOG.info("loaded {} located in the java library path", libName);
                 }
             }
             libLoaded = true;
         } catch (URISyntaxException | UnsatisfiedLinkError | RuntimeException e) {
-            LOG.warn("unable to load JSyzygy library", e);
+            //ignore
         }
     }
 
@@ -86,9 +76,7 @@ public class SyzygyBridge {
      * @return the supported size of the loaded tablebases
      */
     public static synchronized int load(String path){
-        LOG.info("loading syzygy tablebases from {}", path);
         if (tbLargest>0){
-            LOG.warn("Syzygy tablebases are already loaded");
             return tbLargest;
         }
         boolean result = init(path);
